@@ -81,6 +81,26 @@ async def reset(message: Message) -> None:
         reply = "Сбрасывать базу данных могут только администраторы."
     await message.reply(reply)
 
+def usual_syntax(phrase: str) -> str:
+    """Форматирование текста как нормальные люди"""
+    formatted = ""
+
+    for i in range(len(phrase)):
+        if i == 0:
+            formatted += phrase[i].upper()
+
+        elif i > 1:
+            if phrase[i - 1] == " " and phrase[i - 2] in [".", "?", "!"]:
+                formatted += phrase[i].upper()
+
+            else:
+                formatted += phrase[i]
+
+        else:
+            formatted += phrase[i]
+
+    return formatted
+
 
 @bot.on.chat_message(FromUserRule())  # type: ignore[misc]
 async def talk(message: Message) -> None:
@@ -100,8 +120,12 @@ async def talk(message: Message) -> None:
     elif not await aos.path.exists(file_name, loop=bot.loop):
         return
 
-    if random.uniform(0, 100) > config.response_chance:
-        return
+    #Триггер на упоминания, меняйте на свои у меня он Толик Щелбан
+    if ("толик" in text or "щелбан" in text or "бот" in text or "толя" in text):
+        pass
+    else:
+        if randint(1, 100) > RESPONSE_CHANCE:
+            return
 
     # Задержка перед ответом
     await asyncio.sleep(config.response_delay)
@@ -119,7 +143,7 @@ async def talk(message: Message) -> None:
         db.splitlines()
     )
 
-    await message.answer(sentence)
+    await message.answer(usual_syntax(sentence))
 
 
 def main() -> None:
