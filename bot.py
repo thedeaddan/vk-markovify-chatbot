@@ -82,7 +82,7 @@ async def reset(message: Message) -> None:
     await message.reply(reply)
 
 def usual_syntax(phrase: str) -> str:
-    """Форматирование текста как нормальные люди"""
+    """Formats phrase as usual sentence"""
     formatted = ""
 
     for i in range(len(phrase)):
@@ -120,12 +120,15 @@ async def talk(message: Message) -> None:
     elif not await aos.path.exists(file_name, loop=bot.loop):
         return
 
-    #Триггер на упоминания, меняйте на свои у меня он Толик Щелбан
+    
     if ("толик" in text or "щелбан" in text or "бот" in text or "толя" in text):
         pass
     else:
-        if randint(1, 100) > RESPONSE_CHANCE:
+        if random.uniform(0, 100) > config.response_chance:
             return
+    #Эмуляция набирания сообщения
+    await bot.api.messages.set_activity("","typing",peer_id)
+
 
     # Задержка перед ответом
     await asyncio.sleep(config.response_delay)
