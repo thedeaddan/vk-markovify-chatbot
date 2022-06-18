@@ -105,6 +105,7 @@ def usual_syntax(phrase: str) -> str:
 @bot.on.chat_message(FromUserRule())  # type: ignore[misc]
 async def talk(message: Message) -> None:
     text = message.text.lower()
+    peer_id = message.peer_id
     file_name = f"db/{message.peer_id}.txt"
 
     if text:
